@@ -13,7 +13,7 @@ def stream_users_in_batches(batch_size):
         if not batch:
             break  # Stop when no more rows are available
 
-        yield batch
+        return batch
         offset += batch_size
 
     cursor.close()
