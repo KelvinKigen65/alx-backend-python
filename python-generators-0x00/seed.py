@@ -6,8 +6,8 @@ def connect_db():
     try:
         connection = mysql.connector.connect(
             host="localhost",
-            user="your_username",
-            passwd="your_password"
+            user="root",
+            passwd="Kelvin@6580"
         )
         return connection
     except mysql.connector.Error as err:
@@ -26,8 +26,8 @@ def connect_to_prodev():
     try:
         connection = mysql.connector.connect(
             host="localhost",
-            user="your_username",
-            passwd="your_password",
+            user="root",
+            passwd="Kelvin@6580",
             database="ALX_prodev"
         )
         return connection

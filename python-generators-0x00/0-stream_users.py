@@ -5,8 +5,8 @@ import mysql.connector
 def stream_users():
     db = mysql.connector.connect(
         host="localhost",
-        user="your_username",
-        passwd="your_password",
+        user="root",
+        passwd="Kelvin@6580",
         database="your_database"
     )
     cursor = db.cursor(dictionary=True)
