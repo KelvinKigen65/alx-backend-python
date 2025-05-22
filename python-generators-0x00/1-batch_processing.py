@@ -1,8 +1,9 @@
-import MySQLdb
+import mysql.connector  # Instead of MySQLdb
+
 
 def stream_users_in_batches(batch_size):
     """Generator to fetch user records in batches."""
-    conn = MySQLdb.connect(host="localhost", user="your_user", passwd="your_password", db="your_db")
+    conn = mysql.connector.connect(host="localhost", user="root", passwd="Kelvin@6580", db="ALX_Database")
     cursor = conn.cursor(dictionary=True)
 
     offset = 0
