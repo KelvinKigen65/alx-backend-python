@@ -22,7 +22,6 @@ class ExecuteQuery:
         self.cursor.close()
         self.connection.close()
 
-# Usage Example:
 query = "SELECT * FROM users WHERE age > ?"
 params = (25,)
 
