@@ -16,12 +16,12 @@ class DatabaseConnection:
         if exc_type:
             print(f"An error occurred: {exc_value}")  # Log any exception
 
-# Use the context manager to query the database
+# Use the context manager
 with DatabaseConnection('users.db') as conn:
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users")
     results = cursor.fetchall()
 
-# Print query results
+# Print results
 for row in results:
     print(row)
