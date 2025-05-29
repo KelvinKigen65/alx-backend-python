@@ -11,14 +11,14 @@ class ExecuteQuery:
 
     def __enter__(self):
         """Establish connection and execute the query."""
-        self.connection = sqlite3.connect("example.db")  # Connect synchronously
+        self.connection = sqlite3.connect("example.db")  
         self.cursor = self.connection.cursor()
         self.cursor.execute(self.query, self.params)
         return self.cursor.fetchall()
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Handle cleanup: commit changes and close the connection."""
-        self.connection.commit()  # Ensure any changes are saved
+        self.connection.commit() 
         self.cursor.close()
         self.connection.close()
 

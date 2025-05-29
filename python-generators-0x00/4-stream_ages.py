@@ -24,5 +24,5 @@ def compute_average_age():
     average_age = total_age / count if count else 0
     print(f"Average age of users: {average_age:.2f}")
 
-# Run the computation
+
 compute_average_age()

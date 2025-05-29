@@ -4,27 +4,26 @@ import functools
 
 query_cache = {}
 
-# Decorator to manage database connections
 def with_db_connection(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        conn = sqlite3.connect('users.db')  # Open connection
+        conn = sqlite3.connect('users.db')  
         try:
-            return func(conn, *args, **kwargs)  # Pass connection to function
+            return func(conn, *args, **kwargs) 
         finally:
-            conn.close()  # Ensure connection is closed after execution
+            conn.close() 
     return wrapper
 
-# Decorator to cache query results
+
 def cache_query(func):
     @functools.wraps(func)
     def wrapper(conn, query, *args, **kwargs):
         if query in query_cache:
             print("Using cached result for query:", query)
-            return query_cache[query]  # Return cached result
+            return query_cache[query] 
         
-        result = func(conn, query, *args, **kwargs)  # Execute function
-        query_cache[query] = result  # Store result in cache
+        result = func(conn, query, *args, **kwargs) 
+        query_cache[query] = result 
         return result
 
     return wrapper
@@ -36,10 +35,10 @@ def fetch_users_with_cache(conn, query):
     cursor.execute(query)
     return cursor.fetchall()
 
-#### First call will cache the result
+t
 users = fetch_users_with_cache(query="SELECT * FROM users")
 
-#### Second call will use the cached result
+
 users_again = fetch_users_with_cache(query="SELECT * FROM users")
 
 print(users_again)

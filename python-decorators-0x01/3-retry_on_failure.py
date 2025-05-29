@@ -8,12 +8,11 @@ def with_db_connection(func):
     def wrapper(*args, **kwargs):
         conn = sqlite3.connect('users.db')  # Open connection
         try:
-            return func(conn, *args, **kwargs)  # Pass connection to function
+            return func(conn, *args, **kwargs) 
         finally:
-            conn.close()  # Ensure connection is closed after execution
+            conn.close()
     return wrapper
 
-# Decorator to retry a function on failure
 def retry_on_failure(retries=3, delay=2):
     def decorator(func):
         @functools.wraps(func)
@@ -35,6 +34,5 @@ def fetch_users_with_retry(conn):
     cursor.execute("SELECT * FROM users")
     return cursor.fetchall()
 
-# Attempt to fetch users with automatic retry on failure
 users = fetch_users_with_retry()
 print(users)
