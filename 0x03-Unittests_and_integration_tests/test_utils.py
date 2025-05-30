@@ -1,9 +1,9 @@
+
+#!/usr/bin/env python3
+
 import unittest
 from parameterized import parameterized
 from utils import access_nested_map  # Ensure utils.access_nested_map is correctly imported
-
-
-
 class TestAccessNestedMap(unittest.TestCase):
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
