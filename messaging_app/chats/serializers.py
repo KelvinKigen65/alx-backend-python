@@ -29,7 +29,8 @@ class NestedMessageSerializer(serializers.ModelSerializer):
 # --- CONVERSATION SERIALIZER WITH MESSAGES + CUSTOM FIELD ---
 class ConversationSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, read_only=True)
-    messages = NestedMessageSerializer(many=True, read_only=True, source='messages')
+    messages = NestedMessageSerializer(many=True, read_only=True, source='messages.filter(is_active=True)')
+
     latest_message = serializers.SerializerMethodField()
 
     class Meta:
