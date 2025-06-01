@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chats',
     'corsheaders',
-    'rest_framework' = {
+    'rest_framework',
+]
+
+REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
@@ -48,8 +51,6 @@ INSTALLED_APPS = [
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
-
-    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
