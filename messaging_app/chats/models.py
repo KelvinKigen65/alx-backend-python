@@ -19,7 +19,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
-""" Conversation Model"""
+
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(CustomUser, related_name='conversations')
@@ -29,7 +29,7 @@ class Conversation(models.Model):
         return f"Conversation {self.conversation_id}"
 
 
-""" Message Model"""
+""" Message"""
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
