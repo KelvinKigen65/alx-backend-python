@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'chats',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 REST_FRAMEWORK = {
