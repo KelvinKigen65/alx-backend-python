@@ -1,6 +1,6 @@
 # messaging_app/chats/permissions.py
 
-##from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework import permissions
 
 class IsOwnerOrReadOnly(BasePermission):
@@ -8,12 +8,10 @@ class IsOwnerOrReadOnly(BasePermission):
     Custom permission to only allow owners of an object to edit it.
     """
     def has_object_permission(self, request, view, obj):
-        if request.method in ('GET', 'HEAD', 'OPTIONS'):
+        if request.method in ['PUT', 'PATCH', 'DELETE']:
             return True
         return obj.owner == request.user
 
-
-from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 class IsParticipantOfConversation(BasePermission):
     """
