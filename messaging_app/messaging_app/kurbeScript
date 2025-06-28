@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "Checking dependencies..."
+if ! command -v minikube &> /dev/null; then
+  echo "❌ Minikube is not installed"
+  exit 1
+fi
+
+if ! command -v kubectl &> /dev/null; then
+  echo "❌ kubectl is not installed"
+  exit 1
+fi
+
+echo "✅ Starting Minikube cluster..."
+minikube start
+
+echo "📡 Checking cluster status..."
+kubectl cluster-info
+
+echo "📦 Listing pods (all namespaces)..."
+kubectl get pods --all-namespaces
