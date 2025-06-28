@@ -1,0 +1,34 @@
+# Commands used to set up Kubernetes Ingress for Django Messaging App
+
+# 1. Install Nginx Ingress Controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
+
+# 2. Wait for Nginx Ingress Controller to be ready
+kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
+
+# 3. Verify Nginx Ingress Controller installation
+kubectl get pods -n ingress-nginx
+
+# 4. Apply the Ingress configuration
+kubectl apply -f ingress.yaml
+
+# 5. Verify the Ingress resource was created
+kubectl get ingress
+
+# 6. Check Ingress details
+kubectl describe ingress django-messaging-ingress
+
+# 7. Get the external IP of the Ingress Controller
+kubectl get service -n ingress-nginx
+
+# 8. Test the application through Ingress (replace <EXTERNAL-IP> with actual IP)
+# curl http://<EXTERNAL-IP>/
+# curl http://<EXTERNAL-IP>/api/
+
+# 9. If using minikube, enable ingress addon and get URL
+# minikube addons enable ingress
+# minikube service list
+# minikube tunnel
+
+# 10. For local testing with custom domain, add to /etc/hosts
+# echo "127.0.0.1 django-messaging.local" | sudo tee -a /etc/hosts
