@@ -32,3 +32,5 @@ kubectl get service -n ingress-nginx
 
 # 10. For local testing with custom domain, add to /etc/hosts
 # echo "127.0.0.1 django-messaging.local" | sudo tee -a /etc/hosts
+
+jj

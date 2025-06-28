@@ -1,0 +1,71 @@
+---
+# Main Service - initially points to blue version
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app-service
+  labels:
+    app: django-app
+spec:
+  selector:
+    app: django-app
+    version: blue  # Initially points to blue version
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Blue Service - always points to blue version
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app-blue-service
+  labels:
+    app: django-app
+spec:
+  selector:
+    app: django-app
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Green Service - always points to green version
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app-green-service
+  labels:
+    app: django-app
+spec:
+  selector:
+    app: django-app
+    version: green
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP
+
+---
+# LoadBalancer or Ingress for external access
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-app-external
+  labels:
+    app: django-app
+spec:
+  selector:
+    app: django-app
+    version: blue  # Initially points to blue version
+  ports:
+  - port: 8081
+    targetPort: 80
+    protocol: TCP
+  type: LoadBalancer

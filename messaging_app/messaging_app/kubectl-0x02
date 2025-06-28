@@ -15,8 +15,8 @@ NC='\033[0m' # No Color
 # Configuration
 NAMESPACE="default"
 APP_NAME="django-app"
-HEALTH_CHECK_PATH="/"
-READY_CHECK_PATH="/"
+HEALTH_CHECK_PATH="/health/"
+READY_CHECK_PATH="/ready/"
 TIMEOUT=300  # 5 minutes timeout
 
 # Function to print colored output
