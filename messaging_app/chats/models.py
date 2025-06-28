@@ -1,25 +1,24 @@
-from django.contrib.auth.models import AbstractUser,Group,Permission
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 import uuid
-#  User Model
+
+# Custom User Model
 class CustomUser(AbstractUser):
-    groups = models.ManyToManyField(Group, related_name="custom_user_groups")
-    user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions")
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    password = models.CharField(max_length=128)  # Securely by Django
+    # This will be handled securely by Django
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']  # username is mandatory
+    REQUIRED_FIELDS = ['username']  # username is still needed unless removed completely
 
     def __str__(self):
         return self.email
 
-
+""" Conversation Model"""
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(CustomUser, related_name='conversations')
@@ -29,7 +28,7 @@ class Conversation(models.Model):
         return f"Conversation {self.conversation_id}"
 
 
-""" Message"""
+""" Message Model"""
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')

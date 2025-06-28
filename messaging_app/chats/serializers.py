@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import CustomUser, Conversation, Message
 from rest_framework.exceptions import ValidationError
-##from rest_framework.serializers import ValidationError
+from rest_framework.serializers import ValidationError
 # --- USER SERIALIZER ---
 class UserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(required=False)
@@ -29,8 +29,7 @@ class NestedMessageSerializer(serializers.ModelSerializer):
 # --- CONVERSATION SERIALIZER WITH MESSAGES + CUSTOM FIELD ---
 class ConversationSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, read_only=True)
-    messages = NestedMessageSerializer(many=True, read_only=True, source='messages.filter(is_active=True)')
-
+    messages = NestedMessageSerializer(many=True, read_only=True, source='messages')
     latest_message = serializers.SerializerMethodField()
 
     class Meta:
@@ -82,7 +81,23 @@ class ConversationCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         participants = validated_data.pop('participants')
         
+        # Optional: Check for existing conversation with same participants
+        # if Conversation.objects.filter(participants__in=participants).distinct().count() == len(participants):
+        #     raise ValidationError("A conversation with these participants already exists.")
         
         conversation = Conversation.objects.create()
         conversation.participants.set(participants)
         return conversation
+
+class MessageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['conversation', 'sender', 'message_body']
+    def validate(self, data):
+        if 'conversation' not in data:
+            raise ValidationError("Conversation is required.")
+        if 'sender' not in data:
+            raise ValidationError("Sender is required.")
+        if 'message_body' not in data:
+            raise ValidationError("Message body is required.")
+        return data

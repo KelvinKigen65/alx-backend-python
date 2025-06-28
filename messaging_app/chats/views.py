@@ -12,6 +12,7 @@ from .serializers import (
 
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import MessageFilter
+from .pagination import MessagePagination
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
@@ -38,8 +39,10 @@ class MessageViewSet(viewsets.ModelViewSet):
     ordering = ['-sent_at']
 
     def get_queryset(self):
-        # Only return messages from conversations the user participates in
-        return Message.objects.filter(conversation__participants=self.request.user)
+        conversation_id = self.kwargs.get('conversation_id')
+        if conversation_id:
+            return Message.objects.filter(conversation_id=conversation_id)
+        return Message.objects.none()
 
     def get_serializer_class(self):
         return MessageCreateSerializer if self.action == 'create' else MessageSerializer
