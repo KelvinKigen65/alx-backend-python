@@ -1,71 +1,50 @@
----
-# Main Service - initially points to blue version
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-app-service
+  name: messaging-app-service
   labels:
-    app: django-app
+    app: messaging-app
 spec:
   selector:
-    app: django-app
-    version: blue  # Initially points to blue version
+    app: messaging-app
+    version: blue  # Initially points to blue deployment
   ports:
   - port: 80
     targetPort: 80
     protocol: TCP
-  type: ClusterIP
-
+  type: NodePort  # Changed to NodePort for easier testing in Minikube
 ---
-# Blue Service - always points to blue version
+# Internal service for health checks and testing
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-app-blue-service
+  name: messaging-app-blue-internal
   labels:
-    app: django-app
+    app: messaging-app
+    version: blue
 spec:
   selector:
-    app: django-app
+    app: messaging-app
     version: blue
   ports:
   - port: 80
     targetPort: 80
     protocol: TCP
   type: ClusterIP
-
 ---
-# Green Service - always points to green version
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-app-green-service
+  name: messaging-app-green-internal
   labels:
-    app: django-app
+    app: messaging-app
+    version: green
 spec:
   selector:
-    app: django-app
+    app: messaging-app
     version: green
   ports:
   - port: 80
     targetPort: 80
     protocol: TCP
   type: ClusterIP
-
----
-# LoadBalancer or Ingress for external access
-apiVersion: v1
-kind: Service
-metadata:
-  name: django-app-external
-  labels:
-    app: django-app
-spec:
-  selector:
-    app: django-app
-    version: blue  # Initially points to blue version
-  ports:
-  - port: 8081
-    targetPort: 80
-    protocol: TCP
-  type: LoadBalancer

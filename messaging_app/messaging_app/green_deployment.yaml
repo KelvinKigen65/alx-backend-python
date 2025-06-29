@@ -1,49 +1,83 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: django-app-green
+  name: messaging-app-green
   labels:
-    app: django-app
+    app: messaging-app
     version: green
 spec:
-  replicas: 3
+  replicas: 2  # Reduced replicas for testing
   selector:
     matchLabels:
-      app: django-app
+      app: messaging-app
       version: green
   template:
     metadata:
       labels:
-        app: django-app
+        app: messaging-app
         version: green
     spec:
       containers:
-      - name: django-app
-        image: nginx:1.22
+      - name: messaging-app
+        image: nginx:1.22  # Slightly newer version to simulate update
         ports:
         - containerPort: 80
         env:
-        - name: ENVIRONMENT
-          value: "production"
         - name: VERSION
-          value: "green"
-        # Temporarily disabled health checks for troubleshooting
-        # livenessProbe:
-        #   httpGet:
-        #     path: /health/
-        #     port: 8000
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /ready/
-        #     port: 8000
-        #   initialDelaySeconds: 5
-        #   periodSeconds: 5
+          value: "green-v2.0"
+        - name: NEW_FEATURE_ENABLED
+          value: "true"
+        # Simplified health checks
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "250m"
+            memory: "64Mi"
+            cpu: "50m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: "128Mi"
+            cpu: "100m"
+        # Add a custom index.html to identify the version
+        volumeMounts:
+        - name: html-content
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html-content
+        configMap:
+          name: messaging-app-green-content
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: messaging-app-green-content
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Messaging App - Green Version</title>
+        <style>
+            body { background-color: #e8f5e8; color: #2e7d32; font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+            h1 { color: #388e3c; }
+            .new-feature { background-color: #c8e6c9; padding: 10px; border-radius: 5px; margin: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>Messaging App - Green Version (v2.0)</h1>
+        <p>This is the new green deployment</p>
+        <div class="new-feature">
+            <strong>NEW FEATURE:</strong> Enhanced messaging capabilities
+        </div>
+        <p>Status: Active</p>
+    </body>
+    </html>
