@@ -19,12 +19,12 @@ spec:
     spec:
       containers:
       - name: messaging-app
-        image: nginx:1.21  # Using nginx as a simple test instead of custom Django image
+        image: nginx:1.22  # Updated to version 1.22 (represents v2.0)
         ports:
         - containerPort: 80
         env:
         - name: VERSION
-          value: "blue-v1.0"
+          value: "blue-v2.0"  # Updated to v2.0
         # Simplified health checks
         livenessProbe:
           httpGet:
@@ -53,6 +53,11 @@ spec:
       - name: html-content
         configMap:
           name: messaging-app-blue-content
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,11 +72,14 @@ data:
         <style>
             body { background-color: #e3f2fd; color: #0d47a1; font-family: Arial, sans-serif; text-align: center; padding: 50px; }
             h1 { color: #1976d2; }
+            .version { background-color: #1976d2; color: white; padding: 10px; border-radius: 5px; display: inline-block; margin: 10px; }
         </style>
     </head>
     <body>
-        <h1>Messaging App - Blue Version (v1.0)</h1>
-        <p>This is the stable blue deployment</p>
+        <h1>Messaging App - Blue Version</h1>
+        <div class="version">v2.0 - Rolling Update Success!</div>
+        <p>This is the updated blue deployment</p>
         <p>Status: Active</p>
+        <p>Updated: $(date)</p>
     </body>
     </html>
